@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  backward:
+    build: ./backward
+    container_name: loc8r_back
+    command: npm run start
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: loc8r_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf.prod:/etc/nginx/conf.d/nginx.conf
+    depends_on:
+      - backward
